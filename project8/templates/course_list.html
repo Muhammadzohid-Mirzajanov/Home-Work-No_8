@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center mb-4">Barcha Kurslar</h1>
+<div class="row">
+    {% for course in courses %}
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text">{{ course.description|truncatewords:15 }}</p>
+                <a href="{% url 'lesson_list' course.id %}" class="btn btn-primary">Batafsil</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
