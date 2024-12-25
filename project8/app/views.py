@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_list_or_404,redirect
 from .models import Lesson,Course
+from .forms import CourseForm,LessonForm
 
 def course_list(request):
     courses = Course.objects.all()
@@ -33,3 +34,25 @@ def add_lesson(request):
     else:
         form = LessonForm()
     return render(request, 'add_lesson.html', {'form': form})
+
+def update_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'update_course.html', {'form': form})
+
+def update_lesson(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    if request.method == 'POST':
+        form = LessonForm(request.POST, instance=lesson)
+        if form.is_valid():
+            form.save()
+            return redirect('lesson_list', course_id=lesson.course.id)
+    else:
+        form = LessonForm(instance=lesson)
+    return render(request, 'update_lesson.html', {'form': form})
